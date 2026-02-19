@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update User</title>
+</head>
+<body>
+
+<h2>Update User</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="name" value="{{ u.name }}"><br><br>
+    <input type="email" name="email" value="{{ u.email }} " disabled><br><br>
+    <input type="text" name="password" value="{{ u.password }} "><br><br>
+    <button type="submit">Update</button>
+</form>
+
+</body>
+</html>

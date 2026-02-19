@@ -1,0 +1,90 @@
+<!--<form method="POST">-->
+<!--    {% csrf_token %}-->
+<!--    <input type="text" name="otp" placeholder="Enter OTP" required>-->
+<!--    <button type="submit">Verify OTP</button>-->
+<!--</form>-->
+
+<!--{% if error %}-->
+<!--<p style="color:red;">{{ error }}</p>-->
+<!--{% endif %}-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .otp-container {
+            background-color: #fff;
+            padding: 30px 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+
+        .otp-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .otp-container input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .otp-container input[type="text"]:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        .otp-container button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #007BFF;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .otp-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .otp-container .error {
+            color: #FF4C4C;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="otp-container">
+        <h2>OTP Verification</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="otp" placeholder="Enter OTP" required>
+            <button type="submit">Verify OTP</button>
+        </form>
+
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
