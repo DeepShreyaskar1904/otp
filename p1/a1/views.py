@@ -13,35 +13,91 @@ from .models import user
 import random
 from django.core.mail import send_mail
 from django.conf import settings
+from .forms import RegisterForm
+from captcha.models import CaptchaStore
 
+# def reg(request):
+#     if request.method == "POST":
+#         name = request.POST.get('name')
+#         email = request.POST.get('email')
+#         password = request.POST.get('password')
+#
+#
+#         otp = random.randint(100000, 999999)
+#
+#         request.session['reg_data'] = {
+#             'name': name,
+#             'email': email,
+#             'password': password
+#         }
+#         request.session['otp'] = otp
+#
+#         send_mail(
+#             'Your OTP Code',
+#             f'Your OTP is {otp}',
+#             settings.EMAIL_HOST_USER,
+#             [email],
+#             fail_silently=False,
+#         )
+#
+#         return redirect('verify_otp')
+#
+#     return render(request, 'reg.html')
 def reg(request):
+
+    if request.method == "GET":
+        hashkey = CaptchaStore.generate_key()
+        captcha_image_url = f"/captcha/image/{hashkey}/"
+
+        return render(request, "reg.html", {
+            "captcha_key": hashkey,
+            "captcha_image": captcha_image_url
+        })
+
+
     if request.method == "POST":
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
+        user_captcha = request.POST.get("captcha")
+        captcha_key = request.POST.get("captcha_key")
+
+        captcha_valid = CaptchaStore.objects.filter(
+            hashkey=captcha_key,
+            response=user_captcha
+        ).exists()
+
+        if not captcha_valid:
+            hashkey = CaptchaStore.generate_key()
+            captcha_image_url = f"/captcha/image/{hashkey}/"
+
+            return render(request, "reg.html", {
+                "error": "Invalid captcha",
+                "captcha_key": hashkey,
+                "captcha_image": captcha_image_url
+            })
 
 
         otp = random.randint(100000, 999999)
 
-        request.session['reg_data'] = {
-            'name': name,
-            'email': email,
-            'password': password
+        request.session["reg_data"] = {
+            "name": name,
+            "email": email,
+            "password": password
         }
-        request.session['otp'] = otp
+        request.session["otp"] = otp
 
         send_mail(
-            'Your OTP Code',
-            f'Your OTP is {otp}',
+            "Your OTP Code",
+            f"Your OTP is {otp}",
             settings.EMAIL_HOST_USER,
             [email],
             fail_silently=False,
         )
 
-        return redirect('verify_otp')
-
-    return render(request, 'reg.html')
-
+        return redirect("verify_otp")
 def success(req):
     return render(req,'success.html')
 

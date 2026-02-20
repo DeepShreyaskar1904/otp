@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'a1'
+    'a1',
+    'captcha'
 ]
 
 MIDDLEWARE = [
@@ -132,4 +133,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = '12102120601012@adit.ac.in'
-EMAIL_HOST_PASSWORD = 'yburbbwppulywevp'
+EMAIL_HOST_PASSWORD = 'thgjbcbyueghrlrm'
