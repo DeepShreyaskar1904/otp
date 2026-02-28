@@ -134,3 +134,6 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = '12102120601012@adit.ac.in'
 EMAIL_HOST_PASSWORD = 'thgjbcbyueghrlrm'
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'dash'
+LOGOUT_REDIRECT_URL = 'login'

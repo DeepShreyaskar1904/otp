@@ -10,5 +10,6 @@ urlpatterns = [
     path('update/<int:id>/', views.update_user, name='update_user'),
     path('delete/<int:id>/', views.delete_user, name='delete_user'),
     path('verify-otp/', views.verify_otp, name='verify_otp'),
+    path('login/',views.login_view)
 
 ]
