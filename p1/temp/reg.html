@@ -209,6 +209,10 @@
             <input type="hidden" name="captcha_key" value="{{ captcha_key }}">
 
             <button type="submit">Register</button>
+            <p>
+Already registered?
+<a href="{% url 'login' %}">Login here</a>
+</p>
         </form>
 
         {% if error %}

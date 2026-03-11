@@ -30,6 +30,50 @@
 <!--</body>-->
 <!--</html>-->
 
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Dashboard</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<table border="1" cellpadding="3">-->
+<!--    <tr>-->
+<!--        <th>ID</th>-->
+<!--        <th>Name</th>-->
+<!--        <th>Email</th>-->
+<!--        <th>Password</th>-->
+<!--        <th>Action</th>-->
+<!--    </tr>-->
+
+<!--    {% for users in user %}-->
+<!--    <tr>-->
+<!--        <td>{{ forloop.counter }}</td>-->
+<!--        <td>{{ users.name }}</td>-->
+<!--        <td>{{ users.email }}</td>-->
+<!--        <td>{{ users.password }}</td>-->
+<!--        <td>-->
+<!--            <a href="{% url 'update_user' users.id %}">Edit</a> |-->
+<!--            <a href="{% url 'delete_user' users.id %}"-->
+<!--               onclick="return confirm('Are you sure you want to delete?')">-->
+<!--               Delete-->
+<!--            </a>-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--    {% empty %}-->
+<!--    <tr>-->
+<!--        <td colspan="5">No user registered!</td>-->
+<!--    </tr>-->
+<!--    {% endfor %}-->
+<!--</table>-->
+
+<!--<p>Total users found: {{ user|length }}</p>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,37 +82,80 @@
 </head>
 <body>
 
-<table border="1" cellpadding="3">
+<h2>User Dashboard</h2>
+
+<table border="1" cellpadding="5">
     <tr>
         <th>ID</th>
         <th>Name</th>
         <th>Email</th>
-        <th>Password</th>
         <th>Action</th>
     </tr>
 
     {% for users in user %}
     <tr>
         <td>{{ forloop.counter }}</td>
-        <td>{{ users.name }}</td>
+        <td>{{ users.first_name }}</td>
         <td>{{ users.email }}</td>
-        <td>{{ users.password }}</td>
         <td>
             <a href="{% url 'update_user' users.id %}">Edit</a> |
             <a href="{% url 'delete_user' users.id %}"
-               onclick="return confirm('Are you sure you want to delete?')">
+               onclick="return confirm('Are you sure you want to delete this user?')">
                Delete
             </a>
         </td>
     </tr>
+
     {% empty %}
     <tr>
-        <td colspan="5">No user registered!</td>
+        <td colspan="4">No users registered!</td>
     </tr>
     {% endfor %}
 </table>
 
 <p>Total users found: {{ user|length }}</p>
+
+<br><br>
+
+<h3>Make Payment</h3>
+
+<button id="pay-btn">Pay ₹500</button>
+
+<!-- Razorpay Checkout Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+
+var options = {
+    "key": "{{ razorpay_key }}",
+    "amount": "{{ payment.amount }}",
+    "currency": "INR",
+    "name": "Payment Gateway",
+    "description": "Test Transaction",
+    "order_id": "{{ payment.id }}",
+
+    "handler": function (response){
+        alert("Payment Successful!");
+        window.location.href="/success/";
+    },
+
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+
+var rzp = new Razorpay(options);
+
+document.getElementById("pay-btn").onclick = function(e){
+    rzp.open();
+    e.preventDefault();
+}
+
+</script>
+
+<br><br>
+
+<a href="{% url 'logout' %}">Logout</a>
 
 </body>
 </html>

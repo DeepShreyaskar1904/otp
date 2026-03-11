@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail
+import razorpay
 from django.conf import settings
 from captcha.models import CaptchaStore
 import random
@@ -102,7 +103,7 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return redirect('dash')
+            return redirect(dash)
         else:
             messages.error(request, "Invalid credentials")
 
@@ -110,15 +111,36 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect(login_view)
 
 # @login_required(login_url='login')
-def dash(abc):
-    users = user.objects.all()
-    # for u in users:
-    #     u.password = make_password(u.password)
-    return render(abc,'dash.html',{'user':users})
-@login_required(login_url='login')
+# def dash(abc):
+#     users = user.objects.all()
+#     # for u in users:
+#     #     u.password = make_password(u.password)
+#     return render(abc,'dash.html',{'user':users})
+def dash(request):
+
+    users = User.objects.all()
+
+    client = razorpay.Client(
+        auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+    )
+
+    payment = client.order.create({
+        "amount": 50000,  # ₹500
+        "currency": "INR",
+        "payment_capture": 1
+    })
+
+    context = {
+        "user": users,
+        "payment": payment,
+        "razorpay_key": settings.RAZORPAY_KEY_ID
+    }
+
+    return render(request, "dash.html", context)
+# @login_required(login_url='login')
 def update_user(request, id):
     u = get_object_or_404(User, id=id)
 
@@ -134,7 +156,7 @@ def update_user(request, id):
 
     return render(request, 'update.html', {'u': u})
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def delete_user(request, id):
     u = get_object_or_404(User, id=id)
     u.delete()
